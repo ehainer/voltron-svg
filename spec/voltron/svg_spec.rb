@@ -17,7 +17,6 @@ describe Voltron::Svg do
 
   it "should output background css for svg fallback" do
     expect(svg_icon(:airplane)).to_not be_blank
-    svg_icon(Sass::Script::Value::String.new("tree3"))
   end
 
 end
