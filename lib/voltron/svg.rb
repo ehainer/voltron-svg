@@ -8,10 +8,9 @@ module Voltron
   module Svg
 
     module SassHelpers
-      def svg_icon(source, opts={})
-        opts = opts.symbolize_keys.compact
-        puts opts.to_yaml
-        tag = Voltron::Svg::Tag.new(source, opts)
+      def svg_icon(source, options={})
+        options = options.symbolize_keys.compact
+        tag = Voltron::Svg::Tag.new(source, options)
 
         Sass::Script::Value::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
       end
