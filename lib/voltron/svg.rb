@@ -8,8 +8,8 @@ module Voltron
   module Svg
 
     module SassHelpers
-      def svg_icon(source, color = nil, fallback = nil, size = nil, width = nil, height = nil)
-        options = { color: color, fallback: fallback, size: size, width: width, height: height }.compact.map { |k,v| { k => v.value } }.reduce(Hash.new, :merge)
+      def svg_icon(source, options={})
+        options = options.map { |k,v| { k => v.value } }.reduce(Hash.new, :merge)
 
         tag = Voltron::Svg::Tag.new(source.value, options)
 
