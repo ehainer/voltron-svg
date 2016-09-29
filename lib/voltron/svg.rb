@@ -8,12 +8,8 @@ module Voltron
   module Svg
 
     module SassHelpers
-      def svg_icon(source, fallback = nil, size = nil, color = nil)
-        puts "Source: #{source}"
-        puts "Color: #{color}"
-        puts "Fallback: #{fallback}"
-        puts "Size: #{size}"
-        options = { fallback: fallback, size: size, color: color }.compact
+      def svg_icon(source, **options)
+        options = options.symbolize_keys.compact
         puts options.to_yaml
         tag = Voltron::Svg::Tag.new(source, options)
 
