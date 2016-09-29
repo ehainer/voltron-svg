@@ -9,7 +9,12 @@ module Voltron
 
     module SassHelpers
       def svg_icon(source, fallback = nil, size = nil, color = nil)
+        puts "Source: #{source}"
+        puts "Color: #{color}"
+        puts "Fallback: #{fallback}"
+        puts "Size: #{size}"
         options = { fallback: fallback, size: size, color: color }.compact
+        puts options.to_yaml
         tag = Voltron::Svg::Tag.new(source, options)
 
         Sass::Script::Value::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
