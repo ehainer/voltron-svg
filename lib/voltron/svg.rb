@@ -17,7 +17,7 @@ module Voltron
         ::Sass::Script::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
       end
 
-      ::Sass::Script::Functions.declare :svg_icon, [:source, :options], var_args: false, var_kwargs: true
+      ::Sass::Script::Functions.declare :svg_icon, [:source], var_args: false, var_kwargs: true
     end
 
     module ViewHelpers
