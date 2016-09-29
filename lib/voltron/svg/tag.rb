@@ -22,6 +22,7 @@ module Voltron
       end
 
       def image_path
+        # Get the fallback image path, either using the :fallback option if specified, or use the default generated png
         asset_path (@options[:fallback] || name(:png, size.to_s.downcase, color.upcase))
       end
 
@@ -30,15 +31,11 @@ module Voltron
       end
 
       def asset_path(filename)
-        path = ActionController::Base.helpers.asset_path(filename)
-
-        unless path.starts_with?(Rails.application.config.assets.prefix)
-          path_method = (Rails.application.config.assets.digest ? :digest_path : :logical_path)
-          asset_file = Rails.application.assets.find_asset(filename).try(path_method)
-          path = File.join(Rails.application.config.assets.prefix, asset_file) if asset_file
+        if Rails.application.config.assets.digest
+          filename = Rails.application.assets.find_asset(filename).try(:digest_path) || filename
         end
 
-        path
+        File.join(Rails.application.config.assets.prefix, filename)
       end
 
       # Return the html <img /> tag with the needed attributes
@@ -47,7 +44,7 @@ module Voltron
       end
 
       def attributes
-        # Get the fallback image path, either using the :fallback option if specified, or use the default generated png
+        @options[:alt] ||= @file
         @options[:data] ||= {}
         @options[:data].merge!({ svg: true, size: size, image: image_path })
         @options.reject { |k,v| [:color, :fallback].include?(k) }
@@ -161,7 +158,7 @@ module Voltron
         # Basically just the svg's original width (or 1, if an error) multiplied by the largest side
         def density
           if width > height
-            "#{(svg.try(:width) || 1)*width}x#{(svg.try(:height) || 1)*height}"
+            "#{(svg.try(:width) || 1)*width}x#{(svg.try(:height) || 1)*width}"
           else
             "#{(svg.try(:width) || 1)*height}x#{(svg.try(:height) || 1)*height}"
           end
