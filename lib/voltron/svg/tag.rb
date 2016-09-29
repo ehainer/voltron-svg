@@ -106,6 +106,8 @@ module Voltron
           # Write the new svg file
           File.open(to_svg_path, "w") { |f| f.puts content }
 
+          Rails.application.assets_manifest.compile name(:svg, color.upcase)
+
           Voltron.log "Generated SVG: #{app_path(from_svg_path)} -> #{app_path(to_svg_path)}", "SVG", :light_magenta
         end
       end
@@ -130,6 +132,8 @@ module Voltron
             convert << fallback_path
             convert
           end
+
+          Rails.application.assets_manifest.compile name(:png, size.to_s.downcase, color.upcase)
 
           Voltron.log "Generated PNG: #{app_path(to_svg_path)} -> #{app_path(fallback_path)}", "SVG", :light_magenta
           true
