@@ -9,7 +9,13 @@ module Voltron
 
     module SassHelpers
       def svg_icon(source, options={})
-        options = options.symbolize_keys.compact
+        # Remove whitespace and quotes from beginning and end of source
+        source = source.to_s.gsub(/(^[\s"']*)|(["'\s]*$)/, "")
+        source << ".svg" unless source.ends_with?(".svg")
+
+        # Remove whitespace and quotes from beginning and end of each option value
+        options = options.symbolize_keys.compact.map { |k,v| { k => v.to_s.gsub(/(^[\s"']*)|(["'\s]*$)/, "") } }.reduce(Hash.new, :merge)
+
         tag = Voltron::Svg::Tag.new(source, options)
 
         Sass::Script::Value::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
