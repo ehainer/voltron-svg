@@ -10,7 +10,7 @@ module Voltron
     module SassHelpers
       def svg_icon(source, options={})
         options = map_options(options)
-        raise options
+        Voltron.log options.to_json, "SVG"
         tag = Voltron::Svg::Tag.new(source.value, options)
 
         ::Sass::Script::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
