@@ -22,11 +22,23 @@ module Voltron
       end
 
       def image_path
-        ActionController::Base.helpers.asset_path(@options[:fallback] || name(:png, size.to_s.downcase, color.upcase))
+        asset_path (@options[:fallback] || name(:png, size.to_s.downcase, color.upcase))
       end
 
       def svg_path
-        ActionController::Base.helpers.asset_path(name(:svg, color.upcase))
+        asset_path name(:svg, color.upcase)
+      end
+
+      def asset_path(filename)
+        path = ActionController::Base.helpers.asset_path(filename)
+
+        unless path.starts_with?(Rails.application.config.assets.prefix)
+          path_method = (Rails.application.config.assets.digest ? :digest_path : :logical_path)
+          asset_file = Rails.application.assets.find_asset(filename).try(path_method)
+          path = File.join(Rails.application.config.assets.prefix, asset_file) if asset_file
+        end
+
+        path
       end
 
       # Return the html <img /> tag with the needed attributes
