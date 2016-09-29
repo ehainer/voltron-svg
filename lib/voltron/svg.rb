@@ -8,7 +8,7 @@ module Voltron
   module Svg
 
     module SassHelpers
-      def svg_icon(source, **options)
+      def svg_icon(source, options={})
         options = options.symbolize_keys.compact
         puts options.to_yaml
         tag = Voltron::Svg::Tag.new(source, options)
