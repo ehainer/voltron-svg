@@ -9,10 +9,17 @@ module Voltron
 
     module SassHelpers
       def svg_icon(source, options={})
-        tag = Voltron::Svg::Tag.new(source.value, options.try(:value) || {})
+        tag = Voltron::Svg::Tag.new(source.value, map_options(options))
 
         ::Sass::Script::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
       end
+
+      protected
+        def map_options(options={})
+          ::Sass::Util.map_hash(options) do |key, value|
+            [key.to_sym, value.respond_to?(:value) ? value.value : value]
+          end
+        end
 
       ::Sass::Script::Functions.declare :svg_icon, [:source], var_kwargs: true
     end
