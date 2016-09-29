@@ -19,7 +19,7 @@ module Voltron
       protected
         def map_options(options={})
           ::Sass::Util.map_hash(options) do |key, value|
-            [key.to_sym, value.respond_to?(:value) ? value.value : value.to_s]
+            [key.to_sym, value.respond_to?(:value) ? value.value : (value.respond_to?(:representation) ? value.representation : value)]
           end
         end
 
