@@ -139,7 +139,6 @@ module Voltron
 
           # Then convert the SVG to a PNG
           ::MiniMagick::Tool::Convert.new do |convert|
-            convert.merge! ["-repage"]
             convert.merge! ["-gravity", "center"]
             convert.merge! ["-background", "none"]
             convert.merge! ["-quality", 100]
