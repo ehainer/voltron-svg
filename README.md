@@ -65,13 +65,13 @@ For reasons that may or may not be obvious, only the entire color of the SVG can
 
 Possible options for `svg_tag` and `svg-icon`
 
-:color -> The color, silly
-:quality -> The generated PNG quality. Default: 90
-:width -> The width, duh
-:height -> The height, duh
-:size -> Use is same as in `image_tag`, could be specified as "50x50" or just "50" (this option takes priority if :width and :height are also provided)
-:fallback -> If you don't want it to use the default generated fallback image, provide a specific image name, i.e. - "my-more-awesome-fallback.png"
-:extension -> Likely not needed, but if you call `svg_tag :phone` but for some reason it doesn't have a *.svg extension, you can call `svg_tag :phone, extension: "flub"` to have it find "phone.flub" instead. Or just write `svg_tag "phone.flub"` in the first place.
+* :color -> The color, silly
+* :quality -> The generated PNG quality. Default: 90
+* :width -> The width, duh
+* :height -> The height, duh
+* :size -> Use is same as in `image_tag`, could be specified as "50x50" or just "50" (this option takes priority if :width and :height are also provided)
+* :fallback -> If you don't want it to use the default generated fallback image, provide a specific image name, i.e. - "my-more-awesome-fallback.png"
+* :extension -> Likely not needed, but if you call `svg_tag :phone` but for some reason it doesn't have a *.svg extension, you can call `svg_tag :phone, extension: "flub"` to have it find "phone.flub" instead. Or just write `svg_tag "phone.flub"` in the first place.
 
 ## Development
 
