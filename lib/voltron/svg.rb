@@ -33,4 +33,4 @@ module Voltron
   end
 end
 
-require "voltron/svg/railtie" if defined?(Rails)
+require "voltron/svg/engine" if defined?(Rails)
