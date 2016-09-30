@@ -52,7 +52,7 @@ module Voltron
       def attributes
         @options[:alt] ||= @file
         @options[:data] ||= {}
-        @options[:data].merge!({ svg: true, fallback: image_path })
+        @options[:data].merge!({ svg: true, size: size, fallback: image_path })
         @options.reject { |k,v| [:color, :fallback, :quality, :extension].include?(k) }
       end
 

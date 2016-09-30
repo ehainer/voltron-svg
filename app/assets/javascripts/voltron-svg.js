@@ -77,12 +77,11 @@ docReady(function(){
 	var svgs = document.querySelectorAll('img[data-svg="true"]');
 	var options = {
 		each: function(svg){
-			if(width = svg.getAttribute('width')){
-				svg.setAttribute('width', parseFloat(width));
-			}
-			if(height = svg.getAttribute('height')){
-				svg.setAttribute('height', parseFloat(height));
-			}
+            if(svg.dataset.size){
+                var dims = svg.dataset.size.split('x');
+				svg.setAttribute('width', parseFloat(dims[0]));
+				svg.setAttribute('height', parseFloat(dims[1]));
+            }
 		}
 	};
 	SVGInjector(svgs, options);
