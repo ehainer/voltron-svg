@@ -10,3 +10,4 @@ tmp/
 log/
 voltron-*.gem
 *.bak
+.keep

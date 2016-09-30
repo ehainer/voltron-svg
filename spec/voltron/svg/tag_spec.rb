@@ -8,8 +8,20 @@ describe Voltron::Svg::Tag do
 
   before(:each) do
     FileUtils.rm_rf(File.expand_path("../../../railsapp/public/assets/", __FILE__))
-    FileUtils.rm_rf(Dir.glob(File.expand_path("../../../railsapp/app/assets/images/*.png", __FILE__)))
-    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.323A45.svg", __FILE__)) if File.exists?(svg)
+    FileUtils.rm(Dir.glob(File.expand_path("../../../railsapp/app/assets/images/*.png", __FILE__)))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.323A45.svg", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/airplane.323A45.svg", __FILE__))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/calendar.TEAL.flub", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/calendar.TEAL.flub", __FILE__))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.TEAL.svg", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/airplane.TEAL.svg", __FILE__))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.RED.svg", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/airplane.RED.svg", __FILE__))
+  end
+
+  after(:all) do
+    FileUtils.rm_rf(File.expand_path("../../../railsapp/public/assets/", __FILE__))
+    FileUtils.rm(Dir.glob(File.expand_path("../../../railsapp/app/assets/images/*.png", __FILE__)))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.323A45.svg", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/airplane.323A45.svg", __FILE__))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/calendar.TEAL.flub", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/calendar.TEAL.flub", __FILE__))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.TEAL.svg", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/airplane.TEAL.svg", __FILE__))
+    FileUtils.rm(File.expand_path("../../../railsapp/app/assets/svg/airplane.RED.svg", __FILE__)) if File.exists?(File.expand_path("../../../railsapp/app/assets/svg/airplane.RED.svg", __FILE__))
   end
 
   it "should have a width" do
@@ -71,24 +83,43 @@ describe Voltron::Svg::Tag do
     attrs = tag.attributes
     expect(attrs[:data][:svg]).to eq(true)
     expect(attrs[:data][:size]).to eq("16x16")
-    expect(attrs[:data][:image]).to_not be_blank
+    expect(attrs[:data][:fallback]).to_not be_blank
   end
 
   it "should permit overriding the fallback image" do
     tag = Voltron::Svg::Tag.new(:airplane, fallback: "1.jpg")
-    expect(tag.attributes[:data][:image]).to match(/1\-[A-Z0-9]+\.jpg$/i)
+    expect(tag.attributes[:data][:fallback]).to match(/1\-[A-Z0-9]+\.jpg$/i)
   end
 
   it "should not permit svg tag specific options in the img tag attributes" do
-    tag = Voltron::Svg::Tag.new(:airplane, fallback: "1.jpg", color: "red", alt: "Plane")
+    tag = Voltron::Svg::Tag.new(:airplane, fallback: "1.jpg", color: "red", alt: "Plane", extension: :svg, quality: 100)
     expect(tag.attributes).to_not have_key(:color)
     expect(tag.attributes).to_not have_key(:fallback)
+    expect(tag.attributes).to_not have_key(:extension)
+    expect(tag.attributes).to_not have_key(:quality)
     expect(tag.attributes).to have_key(:alt)
+    expect(tag.attributes[:alt]).to eq("Plane")
   end
 
   it "should have an img html tag" do
     tag = Voltron::Svg::Tag.new(:airplane)
     expect(tag.html).to match(/^<img.*/i)
+  end
+
+  it "should use the extension to format file names" do
+    tag = Voltron::Svg::Tag.new(:airplane)
+    expect(File.basename(tag.to_svg_path)).to eq("airplane.svg")
+
+    tag = Voltron::Svg::Tag.new(:airplane, color: :teal)
+    expect(File.basename(tag.to_svg_path)).to eq("airplane.TEAL.svg")
+
+    tag = Voltron::Svg::Tag.new(:calendar, color: :teal, extension: :flub)
+    expect(File.basename(tag.to_svg_path)).to eq("calendar.TEAL.flub")
+    expect(File.basename(tag.from_svg_path)).to eq("calendar.flub")
+
+    tag = Voltron::Svg::Tag.new("calendar.flub", color: :teal)
+    expect(File.basename(tag.to_svg_path)).to eq("calendar.TEAL.flub")
+    expect(File.basename(tag.from_svg_path)).to eq("calendar.flub")
   end
 
 end

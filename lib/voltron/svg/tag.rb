@@ -88,14 +88,21 @@ module Voltron
       def name(extension = nil, *opts)
         filename = @file.to_s
 
+        if extension.nil? && (matches = filename.match(/\.(.*)$/i))
+          extension = matches[1]
+        end
+
         # If called like `svg_tag :my_icon`, convert to "my-icon"
         # If the filename "my_icon" is actually needed, call `svg_tag "my_icon"` (don't use symbol)
         filename = filename.dasherize if @file.is_a?(Symbol)
 
         pieces = filename.split(".").insert(1, opts).flatten
-        pieces.uniq! unless extension.nil? # In the extremely unlikely event of a file named /^svg.*\.svg$/ (or similar) and a defined extension
-        pieces << extension # Add the extension, if nil it will just get removed on the next line
-        pieces.reject!(&:blank?) # Remove anything that might be empty or nil
+
+        # Add the extension if it doesn't end with the extension, if nil it will just get removed on the next line
+        pieces << extension unless pieces[-1] == extension.to_s
+
+        # Remove anything that might be empty or nil
+        pieces.reject!(&:blank?)
 
         # Put all the pieces together, get a name like file.50x50.RED.png
         pieces.join(".")
