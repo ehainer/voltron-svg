@@ -33,6 +33,11 @@ module Voltron
   # The environment(s) that svg -> png generation can occur in. Defaults to "development"
   # Can specify either a single environment or an array of environments. NOT recommended for production
   # config.svg.build_environment << :development
+
+  # The quality (0-100) of generated PNG's, can be overridden in SASS using:
+  # svg-icon(icon, $quality: 100) or in the view helper:
+  # svg_tag(:icon, quality: 100)
+  # config.svg.quality = 90
 CONTENT
             end
           end

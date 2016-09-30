@@ -7,9 +7,10 @@ module Voltron
 
     class Svg
 
-      attr_accessor :build_environment, :source_directory, :image_directory
+      attr_accessor :build_environment, :source_directory, :image_directory, :quality
 
       def initialize
+        @quality ||= 90
         @build_environment ||= [:development]
         @source_directory ||= Rails.root.join("app", "assets", "svg")
         @image_directory ||= Rails.root.join("app", "assets", "images")
