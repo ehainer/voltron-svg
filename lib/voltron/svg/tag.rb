@@ -8,6 +8,7 @@ module Voltron
 
       def initialize(file, options={})
         options = options.symbolize_keys
+        options[:extension] ||= :svg if file.is_a?(Symbol) # Ensure the svg extension is added if a symbol was provided for icon name
         @file = file
         @options = options
         setup
