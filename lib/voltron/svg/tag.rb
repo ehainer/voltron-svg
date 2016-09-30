@@ -84,8 +84,7 @@ module Voltron
         filename = filename.dasherize if @file.is_a?(Symbol)
 
         ending = filename.match(/\.(.*)$/)
-        extension = nil
-        extension = ending[1] unless ending.nil?
+        extension = ending[1] if !ending.nil? && extension.nil?
         extension = "svg" if @file.is_a?(Symbol) && extension.nil?
 
         filename = filename.gsub(/\.svg$/i, "")
