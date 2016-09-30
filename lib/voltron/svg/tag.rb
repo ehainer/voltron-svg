@@ -8,7 +8,6 @@ module Voltron
 
       def initialize(file, options={})
         options = options.symbolize_keys
-        options[:extension] ||= :svg if file.is_a?(Symbol) # Ensure the svg extension is added if a symbol was provided for icon name
         @file = file
         @options = options
         setup
@@ -17,6 +16,14 @@ module Voltron
       def setup
         # If a size is specified, extract it's width/height
         @options[:width], @options[:height] = extract_dimensions(@options.delete(:size)) if @options[:size]
+
+        # Ensure the svg extension is added if a symbol was provided for icon name
+        @options[:extension] ||= :svg if @file.is_a?(Symbol)
+
+        # Set the default background color, transparent
+        @options[:background] ||= :none
+        # Edge case, since a transparent background is actually referred to as "none", change it if "transparent" is provided
+        @options[:background] = :none if @options[:background].to_s == "transparent"
 
         # Generate the SVG (if custom color) and the corresponding fallback PNG, only if running in environment that allows conversion
         create_png if Voltron.config.svg.buildable?
@@ -141,7 +148,7 @@ module Voltron
           # Then convert the SVG to a PNG
           ::MiniMagick::Tool::Convert.new do |convert|
             convert.merge! ["-gravity", "center"]
-            convert.merge! ["-background", "none"]
+            convert.merge! ["-background", "#{@options[:background]}"]
             convert.merge! ["-quality", 100]
             convert.merge! ["-density", density]
             convert.merge! ["-resize", size]
