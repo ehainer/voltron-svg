@@ -113,7 +113,7 @@ module Voltron
 
       # The SVG we'll ultimately use to generate the PNG, if no color was specified this will be the same as `from_svg_path`
       def to_svg_path
-        File.join Voltron.config.svg.source_directory, name(:svg, color.upcase)
+        File.join Voltron.config.svg.source_directory, name(@options[:extension], color.upcase)
       end
 
       # If a color is specified and we haven't already created the colorized SVG, generate it
