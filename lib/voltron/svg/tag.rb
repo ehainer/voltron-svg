@@ -81,14 +81,18 @@ module Voltron
 
       def name(extension = nil, *opts)
         filename = @file.to_s
+
+        # If called like `svg_tag :my_icon`, convert to "my-icon"
+        # If the filename "my_icon" is actually needed, call `svg_tag "my_icon"` (don't use symbol)
         filename = filename.dasherize if @file.is_a?(Symbol)
 
-        ending = filename.match(/\.(.*)$/)
-        extension = ending[1] if !ending.nil? && extension.nil?
-        extension = "svg" if @file.is_a?(Symbol) && extension.nil?
+        pieces = filename.split(".").insert(1, opts).flatten
+        pieces.uniq! unless extension.nil? # In the extremely unlikely event of a file named /^svg.*\.svg$/ (or similar) and a defined extension
+        pieces << extension # Add the extension, if nil it will just get removed on the next line
+        pieces.reject!(&:blank?) # Remove anything that might be empty or nil
 
-        filename = filename.gsub(/\.svg$/i, "")
-        [filename, opts, extension].flatten.reject(&:blank?).join(".")
+        # Put all the pieces together, get a name like file.50x50.RED.png
+        pieces.join(".")
       end
 
       # The fallback image path for the SVG
@@ -98,7 +102,7 @@ module Voltron
 
       # The source SVG path
       def from_svg_path
-        File.join Voltron.config.svg.source_directory, name
+        File.join Voltron.config.svg.source_directory, name(@options[:extension])
       end
 
       # The SVG we'll ultimately use to generate the PNG, if no color was specified this will be the same as `from_svg_path`
@@ -135,6 +139,7 @@ module Voltron
 
           # Then convert the SVG to a PNG
           ::MiniMagick::Tool::Convert.new do |convert|
+            convert.merge! ["-repage"]
             convert.merge! ["-gravity", "center"]
             convert.merge! ["-background", "none"]
             convert.merge! ["-quality", 100]
