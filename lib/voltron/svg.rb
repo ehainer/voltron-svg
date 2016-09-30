@@ -13,13 +13,13 @@ module Voltron
         Voltron.log options.to_json, "SVG"
         tag = Voltron::Svg::Tag.new(source.value, options)
 
-        ::Sass::Script::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent)"
+        ::Sass::Script::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent);\nbackground-size: #{tag.width}px #{tag.height}px"
       end
 
       protected
         def map_options(options={})
           ::Sass::Util.map_hash(options) do |key, value|
-            [key.to_sym, value.respond_to?(:value) ? value.value : (value.respond_to?(:representation) ? value.representation : value)]
+            [key.to_sym, (value.respond_to?(:representation) ? value.representation : (value.respond_to?(:value) ? value.value : value))]
           end
         end
 
