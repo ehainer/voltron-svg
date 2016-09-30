@@ -10,6 +10,8 @@ module Voltron
     module SassHelpers
       def svg_icon(source, options={})
         options = map_options(options)
+        Voltron.log source.value
+        Voltron.log source.to_s
         Voltron.log options.to_json, "SVG"
         tag = Voltron::Svg::Tag.new(source.value, options)
 
