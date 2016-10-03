@@ -44,7 +44,7 @@ The following assumes the presence of the file `phone.svg` in the `Voltron.confi
 
 Voltron SVG adds the method `svg_tag` to the view helpers, so in your views you can display an SVG with an identical PNG as a fallback image simple by writing:
 
-```ruby
+```erb
 <div class="contact">
   <%= svg_tag :phone %>
   <span>Call This Number</span>
@@ -53,7 +53,7 @@ Voltron SVG adds the method `svg_tag` to the view helpers, so in your views you 
 
 Or specify some options to customize the output:
 
-```ruby
+```erb
 <div class="contact">
   <%= svg_tag :phone, color: :teal, size: "50x50", quality: 100 %>
   <span>Call This Number</span>
