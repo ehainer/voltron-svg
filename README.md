@@ -24,6 +24,20 @@ Then run the following to create the voltron.rb initializer (if not exists alrea
 
     $ rails g voltron:svg:install
 
+To implement the built in svg injector, include the following in `application.js`
+
+```
+//= require voltron-svg
+```
+
+The built in svg injector utilizes Iconic's [SVGInjector](https://github.com/iconic/SVGInjector) library. Refer to the github page for documentation, but note that Voltron SVG does not currently provide a way to alter the config, as it's designed to work with the markup that is output by Voltron SVG by default. See below for example:
+
+```html
+<img width="150" height="150" alt="anchor" data-svg="true" data-size="150x150" data-fallback="/assets/anchor.150x150.TEAL-8cf90f05009ceff4967786502d3c840ef14a79dcb40fa84b156c8ec94e35dfeb.png" src="/assets/anchor.TEAL-f982442b37f0c6c919e15d015d1d0ed9e8c4647116ae4a849ce48b9f7e315c13.svg">
+```
+
+If however you desire more control over the SVG injection process, feel free to not include the `//= require voltron-svg` in application.js, and then roll your own implementation. All tags output by Voltron SVG will follow the same format as the above markup, so you should have access to everything you'd need to do... whatever.
+
 ## Usage
 
 The following assumes the presence of the file `phone.svg` in the `Voltron.config.svg.source_directory` path.
@@ -72,6 +86,8 @@ Possible options for `svg_tag` and `svg-icon`
 * :size -> Use is same as in `image_tag`, could be specified as "50x50" or just "50" (this option takes priority if :width and :height are also provided)
 * :fallback -> If you don't want it to use the default generated fallback image, provide a specific image name, i.e. - "my-more-awesome-fallback.png"
 * :extension -> Likely not needed, but if you call `svg_tag :phone` but for some reason it doesn't have a *.svg extension, you can call `svg_tag :phone, extension: "flub"` to have it find "phone.flub" instead. Or just write `svg_tag "phone.flub"` in the first place.
+
+All other options will be passed to the internal `image_tag` call, so you may also provide options like `:alt`, `:class`, or `:data` and it will be present on the generated <img /> tag. Note that Voltron SVG adds it's own `data-*` attributes (data-svg, data-size, data-fallback to be exact), but they will be merged with any data hash you provide when calling svg_tag. So basically, the 'size', 'svg', and 'fallback' data-* attributes are reserved, but any other data param is fair game.
 
 ## Development
 

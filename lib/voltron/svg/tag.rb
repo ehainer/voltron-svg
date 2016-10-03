@@ -33,7 +33,7 @@ module Voltron
       end
 
       def svg_path
-        asset_path name(:svg, color.upcase)
+        asset_path name(@options[:extension], color.upcase)
       end
 
       def asset_path(filename)
