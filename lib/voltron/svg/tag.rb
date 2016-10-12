@@ -37,7 +37,7 @@ module Voltron
       end
 
       def asset_path(filename)
-        if Rails.application.config.assets.digest
+        if Rails.application.config.assets.digest && Rails.application.config.assets.compile
           filename = Rails.application.assets.find_asset(filename).try(:digest_path) || filename
         end
 
