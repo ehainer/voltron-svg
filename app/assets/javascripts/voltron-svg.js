@@ -7,8 +7,8 @@ if(Voltron){
                 this.inject();
             },
 
-            getTag: function(image, svg, options){
-                options = $.extend(options, { size: '16x16', svg: true, fallback: svg });
+            getTag: function(svg, image, options){
+                options = $.extend(options, { src: svg, size: '16x16', svg: true, fallback: image });
                 if(/^[0-9]+$/.test(options['size'].toString())) options['size'] = (options['size'] + 'x' + options['size']);
                 var size = options['size'].split('x');
                 if(!options['width']) options['width'] = size[0];
@@ -17,12 +17,13 @@ if(Voltron){
             },
 
             getDataAttribute: function(options, attributes){
-                $.each(options, function(index, attr){
+                for(var i=0; i<attributes.length; i++){
+                    var attr = attributes[i];
                     if(options[attr]){
                         options['data-' + attr] = options[attr];
                         delete options[attr];
                     }
-                });
+                }
                 return options;
             },
 
