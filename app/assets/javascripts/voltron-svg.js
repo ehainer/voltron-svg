@@ -18,7 +18,7 @@ if(Voltron){
       },
 
       getTag: function(svg, image, options){
-        options = $.extend(options, { src: svg, size: '16x16', svg: true, fallback: image });
+        options = $.extend({ src: svg, size: '16x16', svg: true, fallback: image }, options);
         if(/^[0-9]+$/.test(options['size'].toString())) options['size'] = (options['size'] + 'x' + options['size']);
         var size = options['size'].split('x');
         if(!options['width']) options['width'] = size[0];
