@@ -132,6 +132,9 @@ module Voltron
           # Set the color of any path/stroke in the svg
           content.gsub! /fill=\"[^\"]+\"/, "fill=\"#{@options[:color]}\""
           content.gsub! /stroke=\"[^\"]+\"/, "stroke=\"#{@options[:color]}\""
+          
+          content.gsub! /fill:#\h+;/, "fill:#{@options[:color]};"
+          content.gsub! /stroke:#\h+;/, "stroke:#{@options[:color]};"
 
           # Write the new svg file
           File.open(to_svg_path, "w") { |f| f.puts content }
