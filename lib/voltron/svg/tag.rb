@@ -39,6 +39,8 @@ module Voltron
       def asset_path(filename)
         if Rails.application.config.assets.digest && Rails.application.config.assets.compile
           filename = Rails.application.assets.find_asset(filename).try(:digest_path) || filename
+        elsif Rails.application.config.assets.digest && !Rails.application.config.assets.compile
+          return ActionController::Base.helpers.asset_path(filename)
         end
 
         File.join(Rails.application.config.assets.prefix, filename)
@@ -132,7 +134,7 @@ module Voltron
           # Set the color of any path/stroke in the svg
           content.gsub! /fill=\"[^\"]+\"/, "fill=\"#{@options[:color]}\""
           content.gsub! /stroke=\"[^\"]+\"/, "stroke=\"#{@options[:color]}\""
-          
+
           content.gsub! /fill:#\h+;/, "fill:#{@options[:color]};"
           content.gsub! /stroke:#\h+;/, "stroke:#{@options[:color]};"
 
