@@ -27,18 +27,20 @@ module Voltron
         create_png if Voltron.config.svg.buildable?
       end
 
-      def image_path
-        # Get the fallback image path, either using the :fallback option if specified, or use the default generated png
-        asset_path (@options[:fallback] || name(:png, size.to_s.downcase, color.upcase))
+      def sass_svg_name
+        Sass::Script::String.new(name(@options[:extension], color.upcase), :string)
       end
 
-      def svg_path
-        asset_path name(@options[:extension], color.upcase)
+      def sass_image_name
+        # Get the fallback image path, either using the :fallback option if specified, or use the default generated png
+        Sass::Script::String.new((@options[:fallback] || name(:png, size.to_s.downcase, color.upcase)), :string)
       end
 
       def asset_path(filename)
         if Rails.application.config.assets.digest && Rails.application.config.assets.compile
           filename = Rails.application.assets.find_asset(filename).try(:digest_path) || filename
+        elsif Rails.application.config.assets.digest && !Rails.application.config.assets.compile
+          return ActionController::Base.helpers.asset_path(filename)
         end
 
         File.join(Rails.application.config.assets.prefix, filename)
@@ -132,7 +134,7 @@ module Voltron
           # Set the color of any path/stroke in the svg
           content.gsub! /fill=\"[^\"]+\"/, "fill=\"#{@options[:color]}\""
           content.gsub! /stroke=\"[^\"]+\"/, "stroke=\"#{@options[:color]}\""
-          
+
           content.gsub! /fill:#\h+;/, "fill:#{@options[:color]};"
           content.gsub! /stroke:#\h+;/, "stroke:#{@options[:color]};"
 
