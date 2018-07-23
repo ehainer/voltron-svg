@@ -11,7 +11,11 @@ module Voltron
       def svg_icon(source, options={})
         tag = Voltron::Svg::Tag.new(source.value, { extension: :svg }.merge(map_options(options)))
 
-        ::Sass::Script::String.new "url(\"#{tag.image_path}\");\nbackground-image: url(\"#{tag.svg_path}\"), linear-gradient(transparent, transparent);\nbackground-size: #{tag.width}px #{tag.height}px"
+        ::Sass::Script::String.new [
+          "#{asset_url(tag.sass_image_name)};",
+          "background-image: #{asset_url(tag.sass_svg_name)}, linear-gradient(transparent, transparent);",
+          "background-size: #{tag.width}px #{tag.height}px"
+        ].join("\n")
       end
 
       def map_options(options={})
